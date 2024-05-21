@@ -17,16 +17,16 @@ module reg_file
     output logic [REG_SIZE - 1:0] out_reg2
 );
 
-    logic [REG_SIZE - 1:0] reg_file[REG_FILE_SIZE - 1:0];
+    logic [REG_SIZE - 1:0] file[REG_FILE_SIZE - 1:0];
 
-    assign out_reg1 = (read_num1 == 0) ? 0 : reg_file[read_num1];
-    assign out_reg2 = (read_num2 == 0) ? 0 : reg_file[read_num2];
+    assign out_reg1 = (read_num1 == 0) ? 0 : file[read_num1];
+    assign out_reg2 = (read_num2 == 0) ? 0 : file[read_num2];
 
     // For future (writeback sync): all other ops will be in posedge
     always_ff @(negedge clk)
     begin
         if (we)
-            reg_file[write_num] <= in_value;
+            file[write_num] <= in_value;
     end
 
 endmodule

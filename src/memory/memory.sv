@@ -1,9 +1,6 @@
 // Memory buffer
 
-`define BYTE_BITS  8
-`define HWORD_BITS 16
-`define WORD_BITS  32
-`define DWORD_BITS 64
+`include "defines.sv"
 
 module memory
     #(parameter MEM_BITS  = 20,
@@ -15,8 +12,8 @@ module memory
     input logic [MEM_BITS - 1:0] address,
     input logic [2:0] mode, // funct3 in risc-v instructions
     // Data
-    input  logic [DATA_SIZE - 1:0] to_write_data,
-    output logic [DATA_SIZE - 1:0] to_read_data
+    input  logic [DATA_SIZE - 1:0] input_data,
+    output logic [DATA_SIZE - 1:0] output_data
 );
 
     logic [DATA_SIZE - 1:0] buffer [(1 << MEM_BITS) - 1:0] /* verilator public */;
@@ -52,7 +49,7 @@ module memory
     };
     logic [DATA_SIZE - 1:0] data_dword = buffer[address];
 
-    assign to_read_data = (is_hword) ? data_hword :
+    assign output_data = (is_hword) ? data_hword :
                           (is_word)  ? data_word  :
                           (is_dword) ? data_dword :
                                        data_byte;
@@ -60,16 +57,16 @@ module memory
     begin
         if (we)
         begin
-            buffer[address][7:0] <= to_write_data[7:0];
+            buffer[address][7:0] <= input_data[7:0];
 
             if (is_hword) begin
-                buffer[address][15:8] <= to_write_data[15:8];
+                buffer[address][15:8] <= input_data[15:8];
             end
             else if (is_word) begin
-                buffer[address][31:8] <= to_write_data[31:8];
+                buffer[address][31:8] <= input_data[31:8];
             end
             else if (is_dword) begin
-                buffer[address][DATA_SIZE - 1:8] <= to_write_data[DATA_SIZE - 1:8];
+                buffer[address][DATA_SIZE - 1:8] <= input_data[DATA_SIZE - 1:8];
             end
         end
     end

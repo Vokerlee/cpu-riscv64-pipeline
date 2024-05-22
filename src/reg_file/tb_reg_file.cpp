@@ -52,7 +52,7 @@ void run_test(Vreg_file *regs, VerilatedVcdC *trace)
 
     // Write test
     regs->write_num = 0x11;
-    regs->to_write_data = -32;
+    regs->input_data = -32;
 
     n_cycles(regs, trace, 3);
 

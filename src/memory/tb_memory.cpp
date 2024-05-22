@@ -53,7 +53,7 @@ void run_test(Vmemory *memory, VerilatedVcdC *trace)
     // Write test #1
     memory->address = 0x13;
     memory->mode = 0b010; // LW/SW (32 bits with sign extend)
-    memory->to_write_data = 0x9FF1188AA;
+    memory->input_data = 0x9FF1188AA;
 
     n_cycles(memory, trace, 3);
     memory->we = 1;
@@ -63,7 +63,7 @@ void run_test(Vmemory *memory, VerilatedVcdC *trace)
     // Write test #1
     memory->address = 0x101;
     memory->mode = 0b001; // LH/SH (16 bits with sign extend)
-    memory->to_write_data = 0x77BB;
+    memory->input_data = 0x77BB;
 
     n_cycles(memory, trace, 3);
     memory->we = 1;

@@ -10,6 +10,7 @@ verilate(
     tb_reg_file
     SOURCES reg_file.sv
     TRACE BUILD
+    INCLUDE_DIRS ${RISCV_PIPELINE_SRC_DIR}
     VERILATOR_ARGS -cc -Wall --exe
 )
 

@@ -1,8 +1,13 @@
 // Memory buffer
 
+`define BYTE_BITS  8
+`define HWORD_BITS 16
+`define WORD_BITS  32
+`define DWORD_BITS 64
+
 module memory
     #(parameter MEM_BITS  = 20,
-                DATA_SIZE = 64)
+                DATA_SIZE = `DWORD_BITS)
 (
     input logic clk,
     input logic we,
@@ -26,24 +31,31 @@ module memory
     // 110 - LWU (32 bits with zero extend)
 
     logic is_hword = (mode[1:0] == 2'b01);
-    logic is_word = (mode[1:0] == 2'b10);
+    logic is_word  = (mode[1:0] == 2'b10);
     logic is_dword = (mode[1:0] == 2'b11);
 
     logic zero_ext = mode[2];
     logic sign_ext = ~zero_ext;
 
-    // Sign-extension
-    logic [DATA_SIZE - 1:0] data_byte  = { {56{sign_ext && buffer[address][7]}},  buffer[address][7:0]  };
-    logic [DATA_SIZE - 1:0] data_hword = { {48{sign_ext && buffer[address][15]}}, buffer[address][15:0] };
-    logic [DATA_SIZE - 1:0] data_word  = { {32{sign_ext && buffer[address][31]}}, buffer[address][31:0] };
+    // {Sign/zero}-extension
+    logic [DATA_SIZE - 1:0] data_byte = {
+        {(DATA_SIZE - `BYTE_BITS) {sign_ext && buffer[address][`BYTE_BITS - 1]}},
+        buffer[address][`BYTE_BITS - 1:0]
+    };
+    logic [DATA_SIZE - 1:0] data_hword = {
+        {(DATA_SIZE - `HWORD_BITS) {sign_ext && buffer[address][`HWORD_BITS - 1]}},
+        buffer[address][`HWORD_BITS - 1:0]
+    };
+    logic [DATA_SIZE - 1:0] data_word  = {
+        {(DATA_SIZE - `WORD_BITS) {sign_ext && buffer[address][`WORD_BITS - 1]}},
+        buffer[address][`WORD_BITS - 1:0]
+    };
     logic [DATA_SIZE - 1:0] data_dword = buffer[address];
 
     assign to_read_data = (is_hword) ? data_hword :
                           (is_word)  ? data_word  :
                           (is_dword) ? data_dword :
                                        data_byte;
-
-    // Sequential writing
     always_ff @(posedge clk)
     begin
         if (we)

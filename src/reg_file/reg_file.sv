@@ -3,7 +3,7 @@
 module reg_file
     #(parameter REG_FILE_BITS = 5,
                 REG_FILE_SIZE = 32,
-                REG_SIZE      = 32)
+                REG_SIZE      = 64)
 (
     input logic clk,
     input logic we,
@@ -23,8 +23,7 @@ module reg_file
     assign out_reg2 = (read_num2 == 0) ? 0 : file[read_num2];
 
     // For future (writeback sync): all other ops will be in posedge
-    always_ff @(negedge clk)
-    begin
+    always_ff @(negedge clk) begin
         if (we)
             file[write_num] <= in_value;
     end

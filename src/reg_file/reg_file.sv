@@ -3,7 +3,7 @@
 `include "defines.sv"
 
 module reg_file
-    #(parameter REG_FILE_BITS = 5,
+    #(parameter REG_FILE_BITS = `REG_FILE_SIZE_BITS,
                 REG_FILE_SIZE = 1 << REG_FILE_BITS,
                 REG_SIZE      = `DWORD_BITS)
 (

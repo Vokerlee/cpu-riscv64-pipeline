@@ -3,7 +3,6 @@
 #include <verilated_vcd_c.h>
 #include "Vmemory.h"
 
-#define MAX_SIM_TIME 20
 vluint64_t sim_time = 0;
 
 void run_test(Vmemory *memory, VerilatedVcdC *trace);

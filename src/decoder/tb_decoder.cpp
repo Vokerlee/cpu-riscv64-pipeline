@@ -5,7 +5,6 @@
 #include "elf64_parser.h"
 #include "Vdecoder.h"
 
-#define MAX_SIM_TIME 20
 vluint64_t sim_time = 0;
 
 void run_test(Vdecoder *decoder, VerilatedVcdC *trace, const elf64_parser::Elf64Data &elf_data);

@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project(riscv_pipeline)
 
 set(RISCV_PIPELINE_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(RISCV_PIPELINE_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 set(RISCV_PIPELINE_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${RISCV_PIPELINE_BINARY_DIR}/bin)
@@ -31,3 +32,4 @@ endif()
 
 add_subdirectory(${RISCV_PIPELINE_SRC_DIR}/reg_file)
 add_subdirectory(${RISCV_PIPELINE_SRC_DIR}/memory)
+add_subdirectory(${RISCV_PIPELINE_SRC_DIR}/decoder)

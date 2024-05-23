@@ -50,9 +50,9 @@ module memory
     logic [DATA_SIZE - 1:0] data_dword = buffer[address];
 
     assign output_data = (is_hword) ? data_hword :
-                          (is_word)  ? data_word  :
-                          (is_dword) ? data_dword :
-                                       data_byte;
+                         (is_word)  ? data_word  :
+                         (is_dword) ? data_dword :
+                                      data_byte;
     always_ff @(posedge clk)
     begin
         if (we)

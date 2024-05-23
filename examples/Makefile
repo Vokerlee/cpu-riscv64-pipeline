@@ -10,7 +10,7 @@ EXE_FILES = $(EXAMPLES:=.out)
 %.o: %.c
 	$(CC)-gcc -c -o $@ $< $(CFLAGS)
 
-%.obj: %.o
+%.obj: %.out
 	$(CC)-objdump -d $< > $<.obj
 
 %.out: %.o

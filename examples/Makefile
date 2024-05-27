@@ -1,5 +1,6 @@
 CC = riscv64-unknown-linux-gnu
-CFLAGS = -nostdlib -O0
+CFLAGS = -O0
+LFLAGS = -nostdlib -Wl,-emain
 
 EXAMPLES = test
 
@@ -14,7 +15,7 @@ EXE_FILES = $(EXAMPLES:=.out)
 	$(CC)-objdump -d $< > $<.obj
 
 %.out: %.o
-	$(CC)-gcc $< -o $@
+	$(CC)-gcc $< -o $@ $(LFLAGS)
 
 all: $(OBJ_FILES) $(EXE_FILES) $(OBJDUMP_FILES)
 

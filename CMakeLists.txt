@@ -16,19 +16,25 @@ if (NOT verilator_FOUND)
     )
 endif()
 
-# add_executable(core src/core.cpp)
-# target_compile_features(core PRIVATE cxx_std_17)
-# target_compile_options(core PRIVATE -Wall -Wextra -Wpedantic)
+add_executable(core src/tb_core.cpp)
+target_compile_features(core PRIVATE cxx_std_17)
+target_compile_options(core PRIVATE -Wall -Wextra -Wpedantic
+                       -I${RISCV_PIPELINE_INC_DIR})
 
-# verilate(
-#     core
-#     SOURCES src/reg_file.sv
-#     TRACE BUILD
-#     VERILATOR_ARGS -cc -Wall --exe
-# )
+verilate(
+    core
+    SOURCES src/core.sv
+    TRACE BUILD
+    INCLUDE_DIRS  ${RISCV_PIPELINE_SRC_DIR}
+                  ${RISCV_PIPELINE_SRC_DIR}/reg_file ${RISCV_PIPELINE_SRC_DIR}/memory
+                  ${RISCV_PIPELINE_SRC_DIR}/decoder  ${RISCV_PIPELINE_SRC_DIR}/alu
+                  ${RISCV_PIPELINE_SRC_DIR}/latch    ${RISCV_PIPELINE_SRC_DIR}/hazard_unit
+                  ${RISCV_PIPELINE_SRC_DIR}/pc
+    VERILATOR_ARGS -cc -Wall --exe -Wno-UNUSEDSIGNAL
+)
 
-# target_include_directories(
-#   core SYSTEM PRIVATE ${VERILATOR_ROOT}/include)
+target_include_directories(
+    core SYSTEM PRIVATE ${VERILATOR_ROOT}/include)
 
 add_subdirectory(${RISCV_PIPELINE_SRC_DIR}/reg_file)
 add_subdirectory(${RISCV_PIPELINE_SRC_DIR}/memory)

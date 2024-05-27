@@ -8,11 +8,11 @@ module alu
     input logic [DATA_SIZE - 1:0] input_data1, input_data2,
     input logic [`ALU_TYPE_BITS - 1:0] alu_op,
     output logic [DATA_SIZE - 1:0] output_data,
-    output logic cmp_res
+    output logic zero_out
 );
 
+    assign zero_out = (output_data === 0);
     logic [4:0] shamt = input_data2[4:0];
-    assign cmp_res = (output_data === 0);
 
     always_comb begin
         case (alu_op)

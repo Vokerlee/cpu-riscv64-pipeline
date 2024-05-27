@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
     trace->open("waveform.vcd");
 
     elf64_parser::Elf64Data elf_data = elf64_parser::get_riscv64_elf_data(argv[1]);
-
     run_test(decoder, trace, elf_data);
 
     trace->close();

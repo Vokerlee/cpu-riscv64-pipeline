@@ -19,7 +19,7 @@ module reg_file
     input logic [REG_SIZE - 1:0] input_data
 );
 
-    logic [REG_SIZE - 1:0] file [REG_FILE_SIZE - 1:0];
+    logic [REG_SIZE - 1:0] file [REG_FILE_SIZE - 1:0] /* verilator public */;
 
     assign output_data1 = (read_num1 == 0) ? 0 : file[read_num1];
     assign output_data2 = (read_num2 == 0) ? 0 : file[read_num2];

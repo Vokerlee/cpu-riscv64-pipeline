@@ -3,6 +3,7 @@
 `define HWORD_BITS 16
 `define WORD_BITS  32
 `define DWORD_BITS 64
+`define QWORD_BITS 128
 
 // Register-file specific
 `define REG_FILE_SIZE_BITS 5
@@ -35,3 +36,22 @@
 `define REG_IMM_OP 7'b0010011
 `define REG_REG_OP 7'b0110011
 `define SYS_CALL   7'b1110011
+
+// PC modes
+`define PC_4   2'b00
+`define PC_IMM 2'b01
+`define PC_REG 2'b10
+
+// Memory modes
+`define BYTE_SIGNED    3'b000
+`define HWORD_SIGNED   3'b001
+`define WORD_SIGNED    3'b010
+`define DWORD_SIGNED   3'b011
+`define BYTE_UNSIGNED  3'b100
+`define HWORD_UNSIGNED 3'b101
+`define WORD_UNSIGNED  3'b110
+
+// Forwarding
+`define NO_FW  2'b00
+`define FW_WB  2'b01
+`define FW_MEM 2'b10

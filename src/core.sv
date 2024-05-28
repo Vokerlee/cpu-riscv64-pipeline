@@ -8,9 +8,9 @@ module core
 );
     // Wire/regs declarations
     logic [`DWORD_BITS - 1:0] instr_fetched, instr_decoded;
-    logic [4:0] rs1_decoded, rs1_execute, rs2_decoded, rs2_execute;
+    logic [4:0] rs1_decoded, rs1_execute /* verilator public */, rs2_decoded, rs2_execute /* verilator public */;
     logic [`DWORD_BITS - 1:0] rs1_decoded_val, rs1_execute_val, rs2_decoded_val, rs2_execute_val;
-    logic [4:0] rd_decoded, rd_execute, rd_mem, rd_writeback;
+    logic [4:0] rd_decoded, rd_execute /* verilator public */, rd_mem, rd_writeback;
 
     logic [`ALU_TYPE_BITS - 1:0] alu_op_decoded, alu_op_execute;
     logic [1:0] alu_src1_decoded, alu_src1_execute, alu_src2_decoded, alu_src2_execute;
@@ -19,7 +19,8 @@ module core
     logic alu_zero_flag;
 
     logic invalid_decoded = 1'b0, invalid_execute = 1'b0, invalid_mem = 1'b0, invalid_writeback = 1'b0;
-    logic exception_decoded, exception_execute, exception_mem, exception_writeback /* verilator public */;
+    logic exception_decoded /* verilator public */, exception_execute /* verilator public */,
+          exception_mem, exception_writeback;
 
     logic [2:0] mem_mode_decoded, mem_mode_execute, mem_mode_mem;
     logic mem_read_decoded, mem_read_execute, mem_read_mem, mem_read_writeback;
@@ -31,12 +32,12 @@ module core
     logic jmp_decoded, jmp_execute;
 
     // Enable-reset flags
-    logic flush_execute, stall_fetch, stall_decode; // controlled by hazard-unit
-    logic branch_taken_execute;
+    logic flush_execute, stall_fetch, stall_decode /* verilator public */; // controlled by hazard-unit
+    logic branch_taken_execute /* verilator public */;
     logic [`DWORD_BITS - 1:0] result_writeback;
 
     logic enable_pc, enable_decode, enable_execute, enable_mem, enable_writeback /* verilator public */;
-    logic reset_decode, reset_execute, reset_mem, reset_writeback;
+    logic reset_decode, reset_execute /* verilator public */, reset_mem, reset_writeback;
 
     assign enable_decode = !stall_decode & !exception_writeback;
     assign reset_decode = R | branch_taken_execute ;
@@ -54,7 +55,7 @@ module core
     assign enable_pc = !stall_fetch & !exception_writeback;
 
     logic [1:0] pc_mode_decoded, pc_mode_execute, next_pc_mode;
-    logic [`DWORD_BITS - 1:0] pc_fetched, pc_decode, pc_execute;
+    logic [`DWORD_BITS - 1:0] pc_fetched, pc_decode, pc_execute /* verilator public */;
     assign next_pc_mode = (branch_taken_execute) ? pc_mode_execute : `PC_4; // else += 4
 
 // Fetch stage

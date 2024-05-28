@@ -1,6 +1,8 @@
+#include <cstdint>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <vector>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
 #include "elf64_parser.h"
@@ -78,16 +80,44 @@ void run_test(Vcore *core, VerilatedVcdC *trace, elf64_parser::Elf64Data *elf_da
                 elf_data->segs[code_segment].data.data(),
                 elf_data->segs[code_segment].data.size() * sizeof(uint32_t));
 
-    // core->core->valid_writeback = 1;
     core->core->reg_file->file[0x02] = 0x100000; // stack pointer
     core->core->pc->pc_val = elf_data->entry;
 
-    size_t n_max_ticks = 1000;
-    do {
-    // while (true) {
-        tick(core, trace);
+    printf("pc");
+    for (size_t i = 0; i < 32; ++i) {
+        printf(",reg%lu", i);
+    }
+    printf("\n");
 
-        if (--n_max_ticks == 0)
-            break;
-    } while (core->core->enable_writeback == 1);
+    size_t n_pc_skips = 0;
+    size_t prev_pc = UINT64_MAX;
+
+    do {
+        cycle(core, trace);
+
+        if (core->core->pc_execute != prev_pc && n_pc_skips == 0) {
+            if (prev_pc != UINT64_MAX && core->core->pc_execute != elf_data->entry) {
+                for (size_t i = 0; i < 32; ++i) {
+                    printf(",%lx", core->core->reg_file->file[i]);
+                }
+                printf("\n");
+            }
+            if (core->core->pc_execute != 0) {
+                printf("%lx", core->core->pc_execute);
+            }
+        }
+        if (core->core->branch_taken_execute || core->core->exception_execute || core->core->reset_execute) {
+            n_pc_skips = 2;
+        } else {
+            n_pc_skips = 1;
+        }
+
+        prev_pc = core->core->pc_execute;
+        n_pc_skips--;
+    } while (core->core->exception_execute == 0);
+
+    for (size_t i = 0; i < 32; ++i) {
+        printf(",%lx", core->core->reg_file->file[i]);
+    }
+    printf("\n");
 }
